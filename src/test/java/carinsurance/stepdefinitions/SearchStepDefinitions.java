@@ -7,7 +7,20 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Open;
+import net.serenitybdd.screenplay.questions.WebElementQuestion;
+import net.serenitybdd.screenplay.ui.Button;
+import net.serenitybdd.screenplay.ui.Link;
+import net.serenitybdd.screenplay.ui.Select;
+import net.serenitybdd.screenplay.waits.Wait;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.lang.annotation.Target;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +29,10 @@ public class SearchStepDefinitions {
 
     @Given("{actor} wants to insure his/her car")
     public void actor_wants_to_insure_his_car(Actor actor) {
-        //TODO: Open the https://www.moneysupermarket.com/shop/car-insurance/questionset/your-car page
-
+        actor.attemptsTo(
+                Open.url("https://www.moneysupermarket.com/dialogue/motor/questions/your-car"),
+                Click.on(Button.withText("Accept all"))
+        );
     }
 
     @DataTableType
@@ -27,6 +42,11 @@ public class SearchStepDefinitions {
 
     @When("{actor} finds his/her car by make and model:")
     public void he_finds_his_car_by_make_and_model(Actor actor,MakeAndModel makeAndModel) {
+        actor.attemptsTo(
+                Click.on(Link.withText("find your car by make or model")),
+                Select.option(makeAndModel.make()).from("#makeId-radio-group"),
+                Select.option(makeAndModel.model()).from("#modelId-radio-select")
+        );
     }
 
     @DataTableType
