@@ -11,8 +11,8 @@ Feature: Search car make and model
     Example: Frank is prompted for the details corresponding to his car make and model
       Given Frank wants to insure his car
       When he finds his car by make and model:
-        | Make    | Ford   |
-        | Model   | Focus  |
+        | Make   | Model  |
+        | Ford   | Focus  |
       And he provides the following additional details:
         |         Question                         |           Answer         |
         | What fuel does it run on?                |  Petrol                  |

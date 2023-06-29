@@ -2,6 +2,8 @@ package carinsurance.stepdefinitions;
 
 import carinsurance.model.MakeAndModel;
 import carinsurance.model.QuestionAndAnswer;
+import carinsurance.tasks.Answer;
+import carinsurance.tasks.SelectMakeAndModel;
 import io.cucumber.java.DataTableType;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -12,6 +14,7 @@ import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.questions.WebElementQuestion;
 import net.serenitybdd.screenplay.ui.Button;
 import net.serenitybdd.screenplay.ui.Link;
+import net.serenitybdd.screenplay.ui.PageElement;
 import net.serenitybdd.screenplay.ui.Select;
 import net.serenitybdd.screenplay.waits.Wait;
 import net.serenitybdd.screenplay.waits.WaitUntil;
@@ -43,9 +46,8 @@ public class SearchStepDefinitions {
     @When("{actor} finds his/her car by make and model:")
     public void he_finds_his_car_by_make_and_model(Actor actor,MakeAndModel makeAndModel) {
         actor.attemptsTo(
-                Click.on(Link.withText("find your car by make or model")),
-                Select.option(makeAndModel.make()).from("#makeId-radio-group"),
-                Select.option(makeAndModel.model()).from("#modelId-radio-select")
+                Click.on(PageElement.containingText("find your car by make or model")),
+                SelectMakeAndModel.of(makeAndModel)
         );
     }
 
@@ -53,8 +55,15 @@ public class SearchStepDefinitions {
     public QuestionAndAnswer questionAndAnswer(Map<String, String> questionAndAnswerFields){
         return new QuestionAndAnswer(questionAndAnswerFields.get("Question"), questionAndAnswerFields.get("Answer"));
     }
-    @When("he provides the following additional details:")
-    public void he_provides_the_following_additional_details(List<QuestionAndAnswer> questionsAndAnswers) {
+
+    @When("{actor} provides the following additional details:")
+    public void he_provides_the_following_additional_details(Actor actor,List<QuestionAndAnswer> questionsAndAnswers) {
+        for(QuestionAndAnswer questionAndAnswer: questionsAndAnswers){
+            actor.attemptsTo(
+                    Answer.theQuestion(questionAndAnswer)
+            );
+
+        }
 
     }
     @Then("he should be proposed the following cars:")
